@@ -15,7 +15,7 @@ public class AccountingRecordsService {
     }
 
     public AccountingRecords findAccountingRecordsId(int id) {
-        return accountingRecordsDao.findById(id);
+        return accountingRecordsDao.findAccountingRecordsById(id);
     }
 
     public void saveAccountingRecords(AccountingRecords accountingRecords) {

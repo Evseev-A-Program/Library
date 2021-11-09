@@ -14,18 +14,11 @@ public class AuthorsDao {
     private static final Logger log = Logger.getLogger(AuthorsDao.class);
 
     public Authors findAuthorsById(int id) {
-        Session session = null;
         Authors author = null;
-        try {
-            session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-            author = (Authors)session.get(Authors.class, id);
+        try(Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()){
+            author = session.get(Authors.class, id);
         } catch (HibernateException e) {
             log.error("Ошибка в создании сессии");
-            System.out.println("Исключение: " + e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
         }
         return author;
     }

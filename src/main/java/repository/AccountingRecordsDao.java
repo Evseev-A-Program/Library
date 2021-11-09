@@ -14,20 +14,13 @@ import java.util.List;
 public class AccountingRecordsDao {
     private static final Logger log = Logger.getLogger(AccountingRecordsDao.class);
 
-    public AccountingRecords findById(int id) {
+    public AccountingRecords findAccountingRecordsById(int id) {
 
-        Session session = null;
         AccountingRecords accountingRecords = null;
-        try {
-            session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-            accountingRecords = (AccountingRecords)session.get(AccountingRecords.class, id);
+        try(Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()){
+            accountingRecords = session.get(AccountingRecords.class, id);
         } catch (Exception e) {
             log.error("Ошибка в создании сессии");
-            System.out.println("Исключение: " + e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
         }
         return accountingRecords;
     }

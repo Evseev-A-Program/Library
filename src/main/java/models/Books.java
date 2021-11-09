@@ -25,16 +25,19 @@ public class Books {
     private String categoryId;
 
     private boolean availability = true;
+    @Enumerated (EnumType.ORDINAL)
+    private Status status;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "authorId")
     private Authors author;
 
     public Books() {
-
+        status = Status.NOT_ISSUED;
     }
 
     public Books(String name, String category) {
+        status = Status.NOT_ISSUED;
         this.name = name;
         this.categoryId = category;
     }

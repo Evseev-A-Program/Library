@@ -1,4 +1,6 @@
 
+import exceptions.ClientNotFoindException;
+import lombok.extern.log4j.Log4j;
 import models.AccountingRecords;
 import models.Authors;
 import models.Books;
@@ -12,6 +14,7 @@ import utils.MyNumberFormat;
 
 import java.util.Scanner;
 
+@Log4j
 public class Main{
     public static void main(String[] args) {
 
@@ -42,9 +45,13 @@ public class Main{
                             switch (choice) {
                                 case (1):
                                     System.out.println("Введите ID");
-                                    int id = scannerInt.nextInt();
-                                    clientService.deleteClient(id);
-                                    break;
+                                    int id = MyNumberFormat.getChoice(scannerInt.nextLine());
+                                    try{
+                                        clientService.deleteClient(id);
+                                    } catch (ClientNotFoindException e){
+                                        log.error(e);
+                                    }
+                                                                        break;
                                 case (2):
                                     System.out.println("Введите ID, имя, фамилию");
                                     id = MyNumberFormat.getChoice(scannerInt.nextLine());

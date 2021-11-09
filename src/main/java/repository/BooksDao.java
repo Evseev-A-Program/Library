@@ -14,18 +14,11 @@ public class BooksDao {
     private static final Logger log = Logger.getLogger(BooksDao.class);
 
     public Books findBooksById(int id) {
-        Session session = null;
         Books book = null;
-        try {
-            session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-            book = (Books)session.get(Books.class, id);
+        try(Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()){
+            book = session.get(Books.class, id);
         } catch (HibernateException e) {
             log.error("Ошибка в создании сессии");
-            System.out.println("Исключение: " + e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
         }
         return book;
     }
@@ -34,7 +27,7 @@ public class BooksDao {
 
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        Long count = ((Long) session.createQuery("select count(*) from Books").uniqueResult());
+        Long count = ((Long) session.createQuery("select count(*) from Books where status = 1").uniqueResult());
         Integer totalBooks = count.intValue();
         tx1.commit();
         session.close();
@@ -49,7 +42,7 @@ public class BooksDao {
     }
 
     public List<Books> findAll() {
-        List<Books> books = (List<Books>) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery("From Books").list();
+        List<Books> books = (List<Books>) HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery("From Books where status = 1").list();
         return books;
     }
 

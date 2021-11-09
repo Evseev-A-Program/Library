@@ -12,19 +12,12 @@ import java.util.List;
 public class ClientDao {
     private static final Logger log = Logger.getLogger(ClientDao.class);
 
-    public Clients findBooksById(int id) {
-        Session session = null;
+    public Clients findClientById(int id) {
         Clients client = null;
-        try {
-            session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-            client = (Clients)session.get(Clients.class, id);
+        try(Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
+            client = session.get(Clients.class, id);
         } catch (HibernateException e) {
             log.error("Ошибка в создании сессии");
-            e.printStackTrace();
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
         }
         return client;
     }
@@ -34,20 +27,18 @@ public class ClientDao {
         return books;
     }
 
-    public void delete(int id) {
+    public void delete(Clients clients) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.delete(session.get(Clients.class, id));
+        session.delete(clients);
         tx1.commit();
         session.close();
     }
 
-    public void update(int id, String firstname, String lastname) {
+    public void update(Clients clients) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.get(Clients.class, id).setFirstname(firstname);
-        session.get(Clients.class, id).setLastname(lastname);
-        session.update(session.get(Clients.class, id));
+        session.update(clients);
         tx1.commit();
         session.close();
     }
