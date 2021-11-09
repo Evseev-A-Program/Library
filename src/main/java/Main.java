@@ -1,5 +1,7 @@
 
-import exceptions.ClientNotFoindException;
+import exceptions.AccountingRecordNotFoundException;
+import exceptions.BookNotFoundException;
+import exceptions.ClientNotFoundException;
 import lombok.extern.log4j.Log4j;
 import models.AccountingRecords;
 import models.Authors;
@@ -25,88 +27,94 @@ public class Main{
 
 
         new GenerateInitialLibrary().generate();
-        Authors author1 = Authors.builder().firstname("FFFFF").lastname("QQQQQ").build();
-        authorsService.saveAuthor(author1);
 
         Scanner scannerInt = new Scanner(System.in);
         Scanner scannerStr = new Scanner(System.in);
 
         while (true) {
-            System.out.println("1 - Редактирование данных \n2 - Показать \n3 - Поиск книги \n4 - Выдача книг");
+            System.out.println("1 - EDIT \n2 - SHOW \n3 - SEARCH BOOK \n4 - BOOK ISSUED");
             int choice = MyNumberFormat.getChoice(scannerInt.nextLine());
             switch (choice) {
                 case (1):
-                    System.out.println("1 - редактировать пользователей \n2 - редактировать книги \n3 - редактировать учетные записи \n4 - назад");
+                    System.out.println("1 - EDIT CLIENT \n2 - EDIT BOOK \n3 - EDIT ACCOUNTING RECORD \n4 - BACK");
                     choice = MyNumberFormat.getChoice(scannerInt.nextLine());
                     switch (choice) {
                         case (1):
-                            System.out.println("1 - удалить \n2 - изменить \n3 - добавить\n4 - назад ");
+                            System.out.println("1 - DELETE \n2 - EDIT \n3 - ADD\n4 - BACK ");
                             choice = MyNumberFormat.getChoice(scannerInt.nextLine());
                             switch (choice) {
                                 case (1):
-                                    System.out.println("Введите ID");
+                                    System.out.println("ENTER ID");
                                     int id = MyNumberFormat.getChoice(scannerInt.nextLine());
                                     try{
                                         clientService.deleteClient(id);
-                                    } catch (ClientNotFoindException e){
+                                    } catch (ClientNotFoundException e){
                                         log.error(e);
                                     }
-                                                                        break;
+                                    break;
                                 case (2):
-                                    System.out.println("Введите ID, имя, фамилию");
+                                    System.out.println("ENTER ID, NAME, SURNAME");
                                     id = MyNumberFormat.getChoice(scannerInt.nextLine());
-                                    if (id != 0) {
                                     String first = scannerStr.nextLine();
                                     String lastname = scannerStr.nextLine();
-                                    booksService.updateBooks(id, first, lastname);
-                                    } else System.out.println("Неверный формат введенных данных");
+                                    try {
+                                        clientService.updateClient(id, first, lastname);
+                                    } catch (ClientNotFoundException e){
+                                        log.error(e);
+                                    }
+
                                     break;
                                 case (3):
-                                    System.out.println("Введите имя");
-                                    String first = scannerStr.nextLine();
-                                    System.out.println("Введите фамилию");
-                                    String lastname = scannerStr.nextLine();
+                                    System.out.println("ENTER NAME");
+                                    first = scannerStr.nextLine();
+                                    System.out.println("ENTER SURNAME");
+                                    lastname = scannerStr.nextLine();
                                     clientService.saveClient(Clients.builder().firstname(first).lastname(lastname).build());
                                     break;
                                 case (4):
-
                                     break;
                                 default:
-                                    System.out.println("Неверный пункт меню");
+                                    System.out.println("Invalid menu item");
                                     break;
                             }
                             break;
                         case (2):
-                            System.out.println("1 - удалить \n2 - изменить \n3 - добавить\n4 - назад ");
+                            System.out.println("1 - DELETE \n2 - EDIT \n3 - ADD\n4 - BACK ");
                             choice = MyNumberFormat.getChoice(scannerInt.nextLine());
                             switch (choice) {
                                 case (1):
-                                    System.out.println("Введите ID");
+                                    System.out.println("ENTER ID");
                                     int id = MyNumberFormat.getChoice(scannerInt.nextLine());
-                                    if (id != 0) {
-                                    booksService.deleteBooks(id);
-                                    } else System.out.println("Неверный формат введенных данных");
+                                    try{
+                                        booksService.deleteBooks(id);
+                                    } catch (BookNotFoundException e){
+                                        log.error(e);
+                                    }
+
                                     break;
                                 case (2):
-                                    System.out.println("Введите ID, NAME, CATEGORY");
+                                    System.out.println("ENTER ID, NAME, CATEGORY");
                                     id = MyNumberFormat.getChoice(scannerInt.nextLine());
-                                    if (id != 0) {
-                                        String name = scannerStr.nextLine();
-                                        String category = scannerStr.nextLine();
+                                    String name = scannerStr.nextLine();
+                                    String category = scannerStr.nextLine();
+                                    try {
                                         booksService.updateBooks(id, name, category);
-                                    } else System.out.println("Неверный формат введенных данных");
+                                    } catch (BookNotFoundException e){
+                                        log.error(e);
+                                    }
+
                                     break;
                                 case (3):
-                                    System.out.println("Введите название");
+                                    System.out.println("ENTER NAME");
                                     String nameadd = scannerStr.nextLine();
-                                    System.out.println("Введите категорию");
+                                    System.out.println("ENTER CATEGORY");
                                     String categoryadd = scannerStr.nextLine();
                                     Books book = Books.builder().name(nameadd).categoryId(categoryadd).build();
-                                    System.out.println("1 Выберите id автора \n2 - введите нового");
+                                    System.out.println("1 ENTER ID AUTHOR \n2 - ENTER NEW AUTHOR");
                                     int number = MyNumberFormat.getChoice(scannerInt.nextLine());
                                     switch (number) {
                                         case (1):
-                                            System.out.println("Введите id");
+                                            System.out.println("ENTER id");
                                             int authorId = MyNumberFormat.getChoice(scannerInt.nextLine());
                                             if (authorId != 0) {
                                                 Authors author = authorsService.findAuthor(authorId);
@@ -117,9 +125,9 @@ public class Main{
                                             } else System.out.println("Неверный формат введенных данных");
                                             break;
                                         case (2):
-                                            System.out.println("Введите имя");
+                                            System.out.println("ENTER NAME");
                                             String firstname = scannerStr.nextLine();
-                                            System.out.println("Введите фамилию");
+                                            System.out.println("ENTER SURNAME");
                                             String lastname = scannerStr.nextLine();
                                             Authors author = Authors.builder().firstname(firstname).lastname(lastname).build();
                                             authorsService.saveAuthor(author);
@@ -128,56 +136,86 @@ public class Main{
                                             authorsService.updateAuthor(author);
                                             break;
                                         default:
-                                            System.out.println("Неверный пункт меню");
+                                            System.out.println("Invalid menu item");
                                             break;
                                     }
                                     break;
                                 case (4):
                                     break;
                                 default:
-                                    System.out.println("Неверный пункт меню");
+                                    System.out.println("Invalid menu item");
                                     break;
                             }
                             break;
                         case (3):
-                            System.out.println("1 - удалить \n2 - изменить \n3 - добавить\n4 - назад ");
+                            System.out.println("1 - DELETE \n2 - EDIT \n3 - ADD\n4 - BACK ");
                             choice = MyNumberFormat.getChoice(scannerInt.nextLine());
                             switch (choice) {
                                 case (1):
-                                    System.out.println("Введите ID");
+                                    System.out.println("ENTER ID");
                                     int id = MyNumberFormat.getChoice(scannerInt.nextLine());
-                                    if (id != 0) {
+                                    try {
                                         accountingRecordsService.deleteAccountingRecords(id);
-                                    } else System.out.println("Неверный формат введенных данных");
+                                    } catch (AccountingRecordNotFoundException e) {
+                                        log.error(e);
+                                    }
                                     break;
                                 case (2):
-                                    System.out.println("Введите ID");
-                                    id = scannerInt.nextInt();
-                                    System.out.println("Введите ID клиента");
-                                    int idclient = scannerInt.nextInt();
-                                    System.out.println("Введите ID книги");
-                                    int idbook = scannerInt.nextInt();
-                                    System.out.println("Введите колличество дней выдачи");
-                                    int days = scannerInt.nextInt();
-                                    if (idbook != 0 || idclient != 0 || days != 0) {
-                                        booksService.updateAvailability(idbook);
-                                        accountingRecordsService.updateAccountingRecords(id, idclient, idbook, days);
-                                    } else System.out.println("Неверный формат введенных данных");
-
+                                    System.out.println("1 - EDIT CLIENT \n2 - EDIT BOOK \n3 - EDIT DAYS \n4 - BACK ");
+                                    choice = MyNumberFormat.getChoice(scannerInt.nextLine());
+                                    switch (choice){
+                                        case (1):
+                                            System.out.println("ENTER ID ACCOUNT RECORD");
+                                            id = MyNumberFormat.getChoice(scannerInt.nextLine());
+                                            System.out.println("ENTER ID СLIENT");
+                                            int idclient = MyNumberFormat.getChoice(scannerInt.nextLine());
+                                            try{
+                                                accountingRecordsService.updateClientAccountingRecordsById(id, idclient);
+                                            } catch (AccountingRecordNotFoundException e){
+                                                log.error(e);
+                                            }
+                                            break;
+                                        case (2):
+                                            System.out.println("ENTER ID ACCOUNT RECORD");
+                                            id = MyNumberFormat.getChoice(scannerInt.nextLine());
+                                            System.out.println("ENTER ID BOOK");
+                                            int idbook = MyNumberFormat.getChoice(scannerInt.nextLine());
+                                            try{
+                                                accountingRecordsService.updateBookAccountingRecordsById(id, idbook);
+                                            } catch (AccountingRecordNotFoundException e){
+                                                log.error(e);
+                                            }
+                                            break;
+                                        case (3):
+                                            System.out.println("ENTER ID ACCOUNT RECORD");
+                                            id = MyNumberFormat.getChoice(scannerInt.nextLine());
+                                            System.out.println("ENTER ID DAYS");
+                                            int days = MyNumberFormat.getChoice(scannerInt.nextLine());
+                                            try{
+                                                accountingRecordsService.updateDaysAccountingRecordsById(id, days);
+                                            } catch (AccountingRecordNotFoundException e){
+                                                log.error(e);
+                                            }
+                                            break;
+                                        case (4):
+                                            break;
+                                        default:
+                                            System.out.println("Invalid menu item");
+                                            break;
+                                    }
                                     break;
                                 case (3):
-                                    System.out.println("Введите id клиента");
-                                    idclient = MyNumberFormat.getChoice(scannerInt.nextLine());
+                                    System.out.println("ENTER ID CLIENT");
+                                    int idclient = MyNumberFormat.getChoice(scannerInt.nextLine());
                                     if (idclient != 0) {
                                         AccountingRecords accountingRecords = AccountingRecords.builder().client(clientService.findClientById(idclient)).build();
                                         accountingRecordsService.saveAccountingRecords(accountingRecords);
                                     } else System.out.println("Неверный формат введенных данных");
 
                                 case (4):
-
                                     break;
                                 default:
-                                    System.out.println("Неверный пункт меню");
+                                    System.out.println("Invalid menu item");
                                     break;
                             }
                             break;
@@ -185,25 +223,21 @@ public class Main{
                         case (4):
                             break;
                         default:
-                            System.out.println("Неверный пункт меню");
+                            System.out.println("Invalid menu item");
                             break;
                     }
                     break;
 
                 case (2):
-                    System.out.println("1 - Клиенты \n2 - Книги \n3 - Авторы \n4 - Учетные записи \n5 - Назад");
+                    System.out.println("1 - CLIENTS \n2 - BOOKS \n3 - ACCOUNTS RECORDS \n4 - BACK");
                     choice = MyNumberFormat.getChoice(scannerInt.nextLine());
                     switch (choice) {
                         case (1):
-                            System.out.println(clientService.findAllClient());
+                            System.out.println(clientService.findAllClients());
                             break;
 
                         case (2):
                             System.out.println(booksService.findAllBooks());
-                            break;
-
-                        case (3):
-                            System.out.println(authorsService.findAllAuthors());
                             break;
 
                         case (4):
@@ -212,50 +246,49 @@ public class Main{
                         case (5):
                             break;
                         default:
-                            System.out.println("Неверный пункт меню");
+                            System.out.println("Invalid menu item");
                             break;
                     }
 
                     break;
 
                 case (3):
-                    System.out.println("1 - Поиск по автору  \n2 - Поиск по названию \n3 - Назад");
+                    System.out.println("1 - SEARCH BY AUTHOR  \n2 - SEARCH BY NAME \n3 - BACK");
                     choice = MyNumberFormat.getChoice(scannerInt.nextLine());
                     switch (choice) {
                         case (1):
-                            System.out.println("Введите имя или фамилию автора");
+                            System.out.println("ENTER NAME OR SURNAME");
                             String name = scannerStr.nextLine();
                             System.out.println(authorsService.searchBookForNameAuthors(name));
                             break;
                         case (2):
-                            System.out.println("Введите название книги");
+                            System.out.println("ENTER NAME");
                             name = scannerStr.nextLine();
                             System.out.println(booksService.searchBooks(name));
                             break;
                         case (3):
                             break;
                         default:
-                            System.out.println("Неверный пункт меню");
+                            System.out.println("Invalid menu item");
                             break;
                     }
                     break;
 
                 case (4):
-                    System.out.println("Введите id клиента для создания его учетной записи");
+                    System.out.println("ENTER id CLIENT");
                     int idclient = MyNumberFormat.getChoice(scannerInt.nextLine());
-                    System.out.println("Введите id книги для создания его учетной записи");
+                    System.out.println("ENTER id BOOK");
                     int idbook = MyNumberFormat.getChoice(scannerInt.nextLine());
-                    System.out.println("Введите время на которое выдается книга (в днях)");
+                    System.out.println("ENTER NUMBER OF DAYS");
                     int days = MyNumberFormat.getChoice(scannerInt.nextLine());
-                    if (idbook != 0 || idclient != 0 || days != 0) {
-                        booksService.updateAvailability(idbook);
+                    if (idclient != 0 || idbook != 0 || days != 0) {
                         AccountingRecords accountingRecords = new AccountingRecords(clientService.findClientById(idclient), booksService.findBooksById(idbook), days);
                         accountingRecordsService.saveAccountingRecords(accountingRecords);
-                    } else System.out.println("Неверный формат введенных данных");
+                    } else System.out.println("Incorrect format of the entered data");
                     break;
 
                 default:
-                    System.out.println("Неверный пункт меню");
+                    System.out.println("Invalid menu item");
                     break;
             }
         }

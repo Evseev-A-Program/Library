@@ -1,5 +1,6 @@
 package service;
 
+import exceptions.BookNotFoundException;
 import models.Books;
 import org.apache.log4j.Logger;
 import repository.BooksDao;
@@ -23,19 +24,28 @@ public class BooksService {
         return booksDao.findBooksById(id);
     }
 
-    public void deleteBooks(int id) {
-        booksDao.delete(id);
-        log.info("Книга удалена");
+    public void deleteBooks(int id) throws BookNotFoundException {
+        Books books = booksDao.findBooksById(id);
+        if (books != null){
+            booksDao.delete(id);
+            log.info("Book delete");
+        } else {
+            throw new BookNotFoundException("The book with id" + id + "was not found");
+        }
+
     }
 
-    public void updateBooks(int id, String name, String category) {
-        booksDao.update(id, name, category);
-        log.info("Книга обновлена");
-    }
-
-    public void updateAvailability(int id){
-        booksDao.updateAvailability(id);
-    }
+    public void updateBooks(int id, String name, String category) throws BookNotFoundException {
+        Books books = booksDao.findBooksById(id);
+        if(books != null){
+            books.setName(name);
+            books.setCategoryId(category);
+            booksDao.update(books);
+            log.info("Book delete");
+        } else {
+            throw new BookNotFoundException("The book with id" + id + "was not found");
+        }
+        }
 
     public List<Books> findAllBooks() {
         return booksDao.findAll();

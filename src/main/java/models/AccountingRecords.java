@@ -44,6 +44,7 @@ public class AccountingRecords {
         returnDate = receiptDate;
         returnDate = returnDate.plusDays(days);
         statusId = "issued";
+        book.setStatus(Status.ISSUED);
     }
 
     public AccountingRecords() {

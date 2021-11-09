@@ -20,7 +20,7 @@ public class AccountingRecordsDao {
         try(Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()){
             accountingRecords = session.get(AccountingRecords.class, id);
         } catch (Exception e) {
-            log.error("Ошибка в создании сессии");
+            log.error("Error session");
         }
         return accountingRecords;
     }
@@ -35,16 +35,10 @@ public class AccountingRecordsDao {
     }
 
 
-    public void update(int id, int idclient, int idbook, int days) {
+    public void update(AccountingRecords accountingRecords) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        ClientService clientService = new ClientService();
-        BooksService booksService = new BooksService();
-        session.get(AccountingRecords.class, id).setClient(clientService.findClientById(idclient));
-        session.get(AccountingRecords.class, id).setBook(booksService.findBooksById(idbook));
-        LocalDate newdate = session.get(AccountingRecords.class, id).getReceiptDate();
-        session.get(AccountingRecords.class, id).setReturnDate(newdate.plusDays(days));
-        session.update(session.get(AccountingRecords.class, id));
+        session.update(accountingRecords);
         tx1.commit();
         session.close();
     }

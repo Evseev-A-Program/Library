@@ -18,7 +18,7 @@ public class AuthorsDao {
         try(Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()){
             author = session.get(Authors.class, id);
         } catch (HibernateException e) {
-            log.error("Ошибка в создании сессии");
+            log.error("Error session");
         }
         return author;
     }
@@ -56,25 +56,4 @@ public class AuthorsDao {
         session.close();
     }
 
-    public void updateID(int id) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.update(session.get(Authors.class, id));
-        tx1.commit();
-        session.close();
-    }
-
-    public void delete(Authors authors) {
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.delete(authors);
-        tx1.commit();
-        session.close();
-    }
-
-
-    public List<Authors> findAll() {
-        List<Authors> authors = (List<Authors>)  HibernateSessionFactoryUtil.getSessionFactory().openSession().createQuery("From Books where availability = false").list();
-        return authors;
-    }
 }

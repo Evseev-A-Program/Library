@@ -1,6 +1,7 @@
 package repository;
 
 import models.Books;
+import models.Status;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -18,7 +19,7 @@ public class BooksDao {
         try(Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()){
             book = session.get(Books.class, id);
         } catch (HibernateException e) {
-            log.error("Ошибка в создании сессии");
+            log.error("Error session");
         }
         return book;
     }
@@ -54,23 +55,13 @@ public class BooksDao {
         session.close();
     }
 
-    public void update(int id, String name, String category) {
+    public void update(Books books) {
         Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
         Transaction tx1 = session.beginTransaction();
-        session.get(Books.class, id).setName(name);
-        session.get(Books.class, id).setCategoryId(category);
-        session.update(session.get(Books.class, id));
+        session.update(books);
         tx1.commit();
         session.close();
     }
 
-    public void updateAvailability(int id){
-        Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession();
-        Transaction tx1 = session.beginTransaction();
-        session.get(Books.class, id).setAvailability(false);
-        session.update(session.get(Books.class, id));
-        tx1.commit();
-        session.close();
-    }
 
 }

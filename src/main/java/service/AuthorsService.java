@@ -25,21 +25,12 @@ public class AuthorsService {
 
     public void saveAuthor(Authors authors) {
         authorsDao.save(authors);
-        log.info("Автор добавлен");
-    }
-
-    public void deleteAuthor(Authors authors) {
-        authorsDao.delete(authors);
-        log.info("Автор удален");
+        log.info("Author save");
     }
 
     public void updateAuthor(Authors authors) {
         authorsDao.update(authors);
-        log.info("Автор обновлен");
-    }
-
-    public List<Authors> findAllAuthors() {
-        return authorsDao.findAll();
+        log.info("Author update");
     }
 
 

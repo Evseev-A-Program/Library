@@ -1,6 +1,6 @@
 package service;
 
-import exceptions.ClientNotFoindException;
+import exceptions.ClientNotFoundException;
 import models.Clients;
 import org.apache.log4j.Logger;
 import repository.ClientDao;
@@ -25,18 +25,18 @@ public class ClientService {
         return clientDao.findClientById(id);
     }
 
-    public void deleteClient(int id) throws ClientNotFoindException {
+    public void deleteClient(int id) throws ClientNotFoundException {
         Clients clients = clientDao.findClientById(id);
         if (clients != null){
             clientDao.delete(clients);
             log.info("Клиент удален");
         } else {
-            throw new ClientNotFoindException("The client with id" + id + "was not found");
+            throw new ClientNotFoundException("The client with id" + id + "was not found");
         }
 
     }
 
-    public void updateClient(int id, String firstname, String lastname) throws ClientNotFoindException {
+    public void updateClient(int id, String firstname, String lastname) throws ClientNotFoundException {
         Clients clients = clientDao.findClientById(id);
         if (clients != null){
             clients.setLastname(lastname);
@@ -44,12 +44,12 @@ public class ClientService {
             clientDao.update(clients);
             log.info("Клиент обновлен");
         } else {
-            throw new ClientNotFoindException("The client with id" + id + "was not found");
+            throw new ClientNotFoundException("The client with id" + id + "was not found");
         }
 
     }
 
-    public List<Clients> findAllClient() {
+    public List<Clients> findAllClients() {
         return clientDao.findAll();
     }
 }

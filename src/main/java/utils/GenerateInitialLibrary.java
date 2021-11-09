@@ -2,7 +2,9 @@ package utils;
 
 import models.Authors;
 import models.Books;
+import models.Clients;
 import service.AuthorsService;
+import service.ClientService;
 
 public class GenerateInitialLibrary {
 
@@ -42,5 +44,8 @@ public class GenerateInitialLibrary {
         author3.addBook(book7);
         author3.addBook(book8);
         authorsService.updateAuthor(author3);
+        ClientService clientService = new ClientService();
+        Clients clients = Clients.builder().firstname("FFFFFFF").lastname("QQQQQQQ").build();
+        clientService.saveClient(clients);
     }
 }

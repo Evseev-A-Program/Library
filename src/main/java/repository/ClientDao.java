@@ -17,7 +17,7 @@ public class ClientDao {
         try(Session session = HibernateSessionFactoryUtil.getSessionFactory().openSession()) {
             client = session.get(Clients.class, id);
         } catch (HibernateException e) {
-            log.error("Ошибка в создании сессии");
+            log.error("Error session");
         }
         return client;
     }

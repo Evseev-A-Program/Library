@@ -24,7 +24,6 @@ public class Books {
 
     private String categoryId;
 
-    private boolean availability = true;
     @Enumerated (EnumType.ORDINAL)
     private Status status;
 
