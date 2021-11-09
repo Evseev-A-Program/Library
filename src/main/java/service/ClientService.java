@@ -44,7 +44,7 @@ public class ClientService {
             clientDao.update(clients);
             log.info("Клиент обновлен");
         } else {
-            throw new ClientNotFoundException("The client with id" + id + "was not found");
+            throw new ClientNotFoundException("The client with id " + id + " was not found");
         }
 
     }

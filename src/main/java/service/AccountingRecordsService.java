@@ -8,6 +8,7 @@ import models.Clients;
 import models.Status;
 import org.apache.log4j.Logger;
 import repository.AccountingRecordsDao;
+import repository.BooksDao;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,7 +32,7 @@ public class AccountingRecordsService {
             accountingRecordsDao.deleteById(id);
             log.info("AccountingRecord delete");
         } else {
-            throw new AccountingRecordNotFoundException("The AccountingRecord with id" + id + "was not found");
+            throw new AccountingRecordNotFoundException("The AccountingRecord with id " + id + " was not found");
         }
 
     }
@@ -44,7 +45,7 @@ public class AccountingRecordsService {
             accountingRecordsDao.update(accountingRecords);
             log.info("AccountingRecord update");
         } else {
-            throw new AccountingRecordNotFoundException("The AccountingRecord with id\" + id + \"was not found");
+            throw new AccountingRecordNotFoundException("The AccountingRecord with id " + id + " was not found");
         }
     }
 
@@ -52,17 +53,18 @@ public class AccountingRecordsService {
         AccountingRecords accountingRecords = accountingRecordsDao.findAccountingRecordsById(id);
 
         if (accountingRecords != null) {
-            Books newbooks = new BooksService().findBooksById(idbook);
+            Books newbook = new BooksService().findBooksById(idbook);
             Books currentbook = accountingRecords.getBook();
-            if (newbooks != currentbook) {
+            if (newbook != currentbook) {
                 currentbook.setStatus(Status.NOT_ISSUED);
-                newbooks.setStatus(Status.ISSUED);
+                new BooksDao().update(currentbook);
+                newbook.setStatus(Status.ISSUED);
+                accountingRecords.setBook(newbook);
+                accountingRecordsDao.update(accountingRecords);
+                log.info("AccountingRecord update");
             }
-            accountingRecords.setBook(newbooks);
-            accountingRecordsDao.update(accountingRecords);
-            log.info("AccountingRecord update");
         } else {
-            throw new AccountingRecordNotFoundException("The AccountingRecord with id\" + id + \"was not found");
+            throw new AccountingRecordNotFoundException("The AccountingRecord with id " + id + " was not found");
         }
     }
 
@@ -74,11 +76,11 @@ public class AccountingRecordsService {
             accountingRecordsDao.update(accountingRecords);
             log.info("AccountingRecord update");
         } else {
-            throw new AccountingRecordNotFoundException("The AccountingRecord with id\" + id + \"was not found");
+            throw new AccountingRecordNotFoundException("The AccountingRecord with id " + id + " was not found");
         }
     }
 
-    public AccountingRecords addDays (AccountingRecords accountingRecords, int days){
+    public AccountingRecords addDays(AccountingRecords accountingRecords, int days) {
         LocalDate newDate = accountingRecords.getReceiptDate().plusDays(days);
         accountingRecords.setReturnDate(newDate);
         return accountingRecords;

@@ -283,10 +283,12 @@ public class Main{
                     int idbook = MyNumberFormat.getChoice(scannerInt.nextLine());
                     System.out.println("ENTER NUMBER OF DAYS");
                     int days = MyNumberFormat.getChoice(scannerInt.nextLine());
-                    if (idclient != 0 || idbook != 0 || days != 0) {
+                    try {
                         AccountingRecords accountingRecords = new AccountingRecords(clientService.findClientById(idclient), booksService.findBooksById(idbook), days);
                         accountingRecordsService.saveAccountingRecords(accountingRecords);
-                    } else System.out.println("Incorrect format of the entered data");
+                    } catch (AccountingRecordNotFoundException e) {
+                     log.error(e);
+                    }
                     break;
 
                 default:

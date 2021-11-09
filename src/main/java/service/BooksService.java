@@ -69,7 +69,7 @@ public class BooksService {
             booksDao.update(books);
             log.info("Book delete");
         } else {
-            throw new BookNotFoundException("The book with id" + id + "was not found");
+            throw new BookNotFoundException("The book with id " + id + " was not found");
         }
         }
 

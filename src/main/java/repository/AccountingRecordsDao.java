@@ -1,5 +1,6 @@
 package repository;
 
+import lombok.extern.log4j.Log4j;
 import models.AccountingRecords;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -11,8 +12,8 @@ import utils.HibernateSessionFactoryUtil;
 import java.time.LocalDate;
 import java.util.List;
 
+@Log4j
 public class AccountingRecordsDao {
-    private static final Logger log = Logger.getLogger(AccountingRecordsDao.class);
 
     public AccountingRecords findAccountingRecordsById(int id) {
 

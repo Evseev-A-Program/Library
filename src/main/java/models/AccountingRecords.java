@@ -1,5 +1,7 @@
 package models;
 
+import exceptions.AccountingRecordNotFoundException;
+import exceptions.BookNotFoundException;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -32,19 +34,24 @@ public class AccountingRecords {
 
     private LocalDate returnDate;
 
-    private String statusId;
+    private Status status;
 
     public AccountingRecords(Clients client){
         this.client = client;
     }
-    public AccountingRecords (Clients client, Books book, int days) {
+
+    public AccountingRecords (Clients client, Books book, int days) throws AccountingRecordNotFoundException {
         this.client = client;
         this.book = book;
         receiptDate = LocalDate.now();
         returnDate = receiptDate;
         returnDate = returnDate.plusDays(days);
-        statusId = "ISSUED";
-        book.setStatus(Status.ISSUED);
+        if (book != null) {
+            book.setStatus(Status.ISSUED);
+            status = book.getStatus();
+        }
+        else throw new AccountingRecordNotFoundException( "The book with id" + id + "was not found");
+
     }
 
     public AccountingRecords() {
@@ -54,12 +61,12 @@ public class AccountingRecords {
 
     @Override
     public String toString() {
-        return "Учетная запись №" + id + '\n' +
-                "клиент:" + client + '\n' +
-                "книга:" + book + '\n' +
-                "Дата выдачи = " + receiptDate + '\n' +
-                "Дата возврата = " + returnDate + '\n' +
-                "Статус = " + statusId +
+        return  "Account Record №" + id + '\n' +
+                "client:" + client +
+                "book:" + book +
+                "Data receipt = " + receiptDate + '\n' +
+                "Data return = " + returnDate + '\n' +
+                "Status = " + status +
         '}' + '\n' + '\n' ;
     }
 }

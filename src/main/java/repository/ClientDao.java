@@ -1,5 +1,6 @@
 package repository;
 
+import lombok.extern.log4j.Log4j;
 import models.Clients;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
@@ -9,8 +10,8 @@ import utils.HibernateSessionFactoryUtil;
 
 import java.util.List;
 
+@Log4j
 public class ClientDao {
-    private static final Logger log = Logger.getLogger(ClientDao.class);
 
     public Clients findClientById(int id) {
         Clients client = null;

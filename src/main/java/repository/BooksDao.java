@@ -1,5 +1,6 @@
 package repository;
 
+import lombok.extern.log4j.Log4j;
 import models.Books;
 import models.Status;
 import org.apache.log4j.Logger;
@@ -11,8 +12,9 @@ import utils.HibernateSessionFactoryUtil;
 import java.util.ArrayList;
 import java.util.List;
 
+@Log4j
 public class BooksDao {
-    private static final Logger log = Logger.getLogger(BooksDao.class);
+
 
     public Books findBooksById(int id) {
         Books book = null;
