@@ -1,6 +1,7 @@
 package repository;
 
 import models.Authors;
+import models.Books;
 import org.apache.log4j.Logger;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;

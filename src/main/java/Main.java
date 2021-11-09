@@ -261,12 +261,12 @@ public class Main{
                         case (1):
                             System.out.println("ENTER NAME OR SURNAME");
                             String name = scannerStr.nextLine();
-                            System.out.println(authorsService.searchBookForNameAuthors(name));
+                            System.out.println(booksService.searchBookForNameAuthors(name));
                             break;
                         case (2):
                             System.out.println("ENTER NAME");
                             name = scannerStr.nextLine();
-                            System.out.println(booksService.searchBooks(name));
+                            System.out.println(booksService.searchBooksForName(name));
                             break;
                         case (3):
                             break;

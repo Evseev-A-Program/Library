@@ -4,6 +4,7 @@ import models.Authors;
 import org.apache.log4j.Logger;
 import repository.AuthorsDao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AuthorsService {
@@ -17,10 +18,6 @@ public class AuthorsService {
 
     public Authors findAuthor(int id) {
         return authorsDao.findAuthorsById(id);
-    }
-
-    public List<Authors> searchBookForNameAuthors(String name) {
-        return authorsDao.searchBookForNameAuthors(name);
     }
 
     public void saveAuthor(Authors authors) {
