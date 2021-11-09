@@ -43,7 +43,7 @@ public class AccountingRecords {
         receiptDate = LocalDate.now();
         returnDate = receiptDate;
         returnDate = returnDate.plusDays(days);
-        statusId = "issued";
+        statusId = "ISSUED";
         book.setStatus(Status.ISSUED);
     }
 
@@ -55,8 +55,8 @@ public class AccountingRecords {
     @Override
     public String toString() {
         return "Учетная запись №" + id + '\n' +
-                "клиент:" + client +
-                "книга:" + book +
+                "клиент:" + client + '\n' +
+                "книга:" + book + '\n' +
                 "Дата выдачи = " + receiptDate + '\n' +
                 "Дата возврата = " + returnDate + '\n' +
                 "Статус = " + statusId +

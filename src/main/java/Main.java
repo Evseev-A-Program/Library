@@ -240,11 +240,13 @@ public class Main{
                             System.out.println(booksService.findAllBooks());
                             break;
 
-                        case (4):
+                        case (3):
                             System.out.println(accountingRecordsService.findAllAccountingRecords());
                             break;
-                        case (5):
+
+                        case (4):
                             break;
+
                         default:
                             System.out.println("Invalid menu item");
                             break;

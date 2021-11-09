@@ -41,8 +41,9 @@ public class Books {
         this.categoryId = category;
     }
 
+
     @Override
     public String toString() {
-        return "\n" + id + " Название = " + name + "; Категория = " + categoryId + '\n';
+        return "\n" + id + " name: " + name + "; category: " + categoryId + "; author: " + author +'\n';
     }
 }

@@ -26,14 +26,15 @@ public class Authors {
     private String lastname;
 
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Books> books = new ArrayList<>();
-
+    private List<Books> books;
 
 
     public Authors() {
+        books = new ArrayList<>();
     }
 
     public Authors(String firstname, String lastname) {
+        books = new ArrayList<>();
         this.firstname = firstname;
         this.lastname = lastname;
     }
@@ -47,10 +48,8 @@ public class Authors {
 
     @Override
     public String toString() {
-        return "\n" + "\n" +
-                "(" + id + ")" + " " +
+        return  "(" + id + ")" + " " +
                  firstname + " " +
-                 lastname +
-                " Книги: " + books;
+                 lastname;
     }
 }
