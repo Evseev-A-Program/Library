@@ -2,6 +2,7 @@ package models;
 
 
 import lombok.*;
+import lombok.extern.log4j.Log4j;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 @Entity
 @Table
 @Builder
+@Log4j
 public class Authors {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +28,7 @@ public class Authors {
     @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Books> books = new ArrayList<>();
 
-   // private static final Logger log = Logger.getLogger(Authors.class);
+
 
     public Authors() {
     }
@@ -40,7 +42,7 @@ public class Authors {
     public void addBook(Books book) {
         book.setAuthor(this);
         books.add(book);
-     //   log.info("Книга добавлена Автору");
+        log.info("Книга добавлена Автору");
     }
 
     @Override
