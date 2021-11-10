@@ -1,5 +1,6 @@
 
 import exceptions.AccountingRecordNotFoundException;
+import exceptions.AuthorNotFoundException;
 import exceptions.BookNotFoundException;
 import exceptions.ClientNotFoundException;
 import lombok.extern.log4j.Log4j;
@@ -116,20 +117,24 @@ public class Main{
                                         case (1):
                                             System.out.println("ENTER id");
                                             int authorId = MyNumberFormat.getChoice(scannerInt.nextLine());
-                                            if (authorId != 0) {
                                                 Authors author = authorsService.findAuthor(authorId);
-                                                book.setAuthor(author);
-                                                author.addBook(book);
-                                                authorsService.updateAuthor(author);
-                                                System.out.println(book);
-                                            } else System.out.println("Неверный формат введенных данных");
+                                                try {
+                                                    if (author == null) throw new AuthorNotFoundException("The AccountingRecord with id " + authorId + " was not found");
+                                                    else {
+                                                        book.setAuthor(author);
+                                                        author.addBook(book);
+                                                        authorsService.updateAuthor(author);
+                                                    }
+                                            } catch (AuthorNotFoundException e){
+                                                    log.error(e);
+                                                }
                                             break;
                                         case (2):
                                             System.out.println("ENTER NAME");
                                             String firstname = scannerStr.nextLine();
                                             System.out.println("ENTER SURNAME");
                                             String lastname = scannerStr.nextLine();
-                                            Authors author = Authors.builder().firstname(firstname).lastname(lastname).build();
+                                            author = Authors.builder().firstname(firstname).lastname(lastname).build();
                                             authorsService.saveAuthor(author);
                                             book.setAuthor(author);
                                             author.addBook(book);
@@ -207,10 +212,8 @@ public class Main{
                                 case (3):
                                     System.out.println("ENTER ID CLIENT");
                                     int idclient = MyNumberFormat.getChoice(scannerInt.nextLine());
-                                    if (idclient != 0) {
                                         AccountingRecords accountingRecords = AccountingRecords.builder().client(clientService.findClientById(idclient)).build();
                                         accountingRecordsService.saveAccountingRecords(accountingRecords);
-                                    } else System.out.println("Неверный формат введенных данных");
 
                                 case (4):
                                     break;
