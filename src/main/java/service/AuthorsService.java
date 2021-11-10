@@ -1,14 +1,14 @@
 package service;
 
+import lombok.extern.log4j.Log4j;
 import models.Authors;
 import org.apache.log4j.Logger;
 import repository.AuthorsDao;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Log4j
 public class AuthorsService {
-    private static final Logger log = Logger.getLogger(AuthorsService.class);
 
     private AuthorsDao authorsDao;
 

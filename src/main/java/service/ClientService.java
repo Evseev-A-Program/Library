@@ -1,14 +1,14 @@
 package service;
 
 import exceptions.ClientNotFoundException;
+import lombok.extern.log4j.Log4j;
 import models.Clients;
 import org.apache.log4j.Logger;
 import repository.ClientDao;
 
 import java.util.List;
-
+@Log4j
 public class ClientService {
-    private static final Logger log = Logger.getLogger(ClientService.class);
 
     private ClientDao clientDao;
 
@@ -18,7 +18,7 @@ public class ClientService {
 
     public void saveClient(Clients clients) {
         clientDao.save(clients);
-        log.info("Клиент добавлен");
+        log.info("Client save");
     }
 
     public Clients findClientById(int id) {
@@ -29,7 +29,7 @@ public class ClientService {
         Clients clients = clientDao.findClientById(id);
         if (clients != null){
             clientDao.delete(clients);
-            log.info("Клиент удален");
+            log.info("Client delete");
         } else {
             throw new ClientNotFoundException("The client with id" + id + "was not found");
         }
@@ -42,7 +42,7 @@ public class ClientService {
             clients.setLastname(lastname);
             clients.setFirstname(firstname);
             clientDao.update(clients);
-            log.info("Клиент обновлен");
+            log.info("Client update");
         } else {
             throw new ClientNotFoundException("The client with id " + id + " was not found");
         }

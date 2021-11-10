@@ -1,6 +1,7 @@
 package service;
 
 import exceptions.BookNotFoundException;
+import lombok.extern.log4j.Log4j;
 import models.Authors;
 import models.Books;
 import org.apache.log4j.Logger;
@@ -8,9 +9,8 @@ import repository.BooksDao;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Log4j
 public class BooksService {
-    private static final Logger log = Logger.getLogger(BooksService.class);
 
     private BooksDao booksDao;
 

@@ -2,6 +2,7 @@ package service;
 
 import exceptions.AccountingRecordNotFoundException;
 import exceptions.BookNotFoundException;
+import lombok.extern.log4j.Log4j;
 import models.AccountingRecords;
 import models.Books;
 import models.Clients;
@@ -12,10 +13,9 @@ import repository.BooksDao;
 
 import java.time.LocalDate;
 import java.util.List;
-
+@Log4j
 public class AccountingRecordsService {
     private AccountingRecordsDao accountingRecordsDao;
-    private static final Logger log = Logger.getLogger(AccountingRecordsService.class);
 
     public AccountingRecordsService() {
         accountingRecordsDao = new AccountingRecordsDao();
@@ -29,6 +29,12 @@ public class AccountingRecordsService {
     public void deleteAccountingRecords(int id) throws AccountingRecordNotFoundException {
         AccountingRecords accountingRecords = accountingRecordsDao.findAccountingRecordsById(id);
         if (accountingRecords != null) {
+            Books book = accountingRecords.getBook();
+            book.setStatus(Status.NOT_ISSUED);
+            new BooksDao().update(book);
+            accountingRecords.setBook(null);
+            accountingRecords.setClient(null);
+            accountingRecordsDao.update(accountingRecords);
             accountingRecordsDao.deleteById(id);
             log.info("AccountingRecord delete");
         } else {
