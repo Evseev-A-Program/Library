@@ -43,7 +43,7 @@ public class Authors {
     public void addBook(Books book) {
         book.setAuthor(this);
         books.add(book);
-        log.info("Книга добавлена Автору");
+        log.info("The book was added to the Author");
     }
 
     @Override

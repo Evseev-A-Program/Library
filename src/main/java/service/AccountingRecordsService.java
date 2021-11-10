@@ -61,8 +61,8 @@ public class AccountingRecordsService {
                 newbook.setStatus(Status.ISSUED);
                 accountingRecords.setBook(newbook);
                 accountingRecordsDao.update(accountingRecords);
-                log.info("AccountingRecord update");
             }
+            log.info("AccountingRecord update");
         } else {
             throw new AccountingRecordNotFoundException("The AccountingRecord with id " + id + " was not found");
         }
